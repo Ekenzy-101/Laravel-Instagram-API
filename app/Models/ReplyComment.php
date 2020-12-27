@@ -14,7 +14,7 @@ class ReplyComment extends Model
 
     protected $keyType = "string";
 
-    protected $table = "ig_post_comments";
+    protected $table = "ig_reply_comments";
 
     protected $fillable = [
         'id',
@@ -26,7 +26,12 @@ class ReplyComment extends Model
 
     public function comment() : BelongsTo
     {
-        return $this->belongsTo(PostComment::class, "comment_id", "id");
+        return $this->belongsTo(PostComment::class, "comment_id", "id", "replies");
+    }
+
+    public function post() : BelongsTo
+    {
+        return $this->belongsTo(Post::class, "post_id", "id");
     }
 
     public function user() : BelongsTo

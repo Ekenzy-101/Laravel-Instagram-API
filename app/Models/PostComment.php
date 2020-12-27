@@ -25,7 +25,7 @@ class PostComment extends Model
     ];
 
     public function replies() : HasMany {
-        return $this->hasMany(PostComment::class, "comment_id", "id");
+        return $this->hasMany(ReplyComment::class, "comment_id", "id");
     }
 
     public function post() : BelongsTo
