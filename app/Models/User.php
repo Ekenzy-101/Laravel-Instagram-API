@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Mail\Verification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Mail;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -31,6 +33,8 @@ class User extends Authenticatable implements JWTSubject
         'bio',
         'website',
         'name',
+        'verification_code',
+        'email_verified_at'
     ];
 
     protected $attributes = [
@@ -39,7 +43,6 @@ class User extends Authenticatable implements JWTSubject
         'image_url' => '',
         'bio' => '',
         'website' => '',
-        'name' => '',
     ];
 
     protected $hidden = [
@@ -50,6 +53,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
 
     public function followers(): BelongsToMany
     {
@@ -69,6 +73,11 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        Mail::to($this->email)->send(new Verification($this));
     }
 
     public function posts() : HasMany

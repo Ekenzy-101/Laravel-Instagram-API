@@ -52,6 +52,28 @@ class UserType extends GraphQLType
                 "type" => Type::listOf(GraphQL::type("Post")),
                 "description" => "The posts created by this user"
             ],
+            "followers" => [
+                "type" => Type::listOf(GraphQL::type("User")),
+                "description" => "The people that are following the user"
+            ],
+            "following" => [
+                "type" => Type::listOf(GraphQL::type("User")),
+                "description" => "The people the user is following"
+            ],
+            "followingCount" => [
+                "type" => Type::nonNull(Type::int()),
+                "description" => "The no of people the user is following",
+                "resolve" => function ($root, $args) {
+                    return User::find($root->id)->following->count();
+                }
+            ],
+            "followersCount" => [
+                "type" => Type::nonNull(Type::int()),
+                "description" => "The no of people that are following the user",
+                "resolve" => function ($root, $args) {
+                    return User::find($root->id)->followers->count();
+                }
+            ],
         ];
     }
 }

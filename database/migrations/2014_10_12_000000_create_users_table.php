@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('bio', 150);
             $table->string('website');
             $table->string('name', 50);
+            $table->unsignedInteger('verification_code')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
