@@ -2,68 +2,27 @@
 
 declare(strict_types=1);
 
+use App\GraphQL\Mutations\ResendCodeMutation;
+use App\GraphQL\Mutations\UpdateProfileMutation;
 use App\GraphQL\Queries\PostCommentsQuery;
 use App\GraphQL\Queries\PostQuery;
 use App\GraphQL\Queries\PostsQuery;
+use App\GraphQL\Queries\ProfileQuery;
 use App\GraphQL\Queries\ReplyCommentsQuery;
 use App\GraphQL\Queries\UserQuery;
-// use App\GraphQL\Types\PostCommentType;
-// use App\GraphQL\Types\PostType;
-// use App\GraphQL\Types\UserType;
 
 return [
-
-    // The prefix for routes
     'prefix' => 'graphql',
 
-    // The routes to make GraphQL request. Either a string that will apply
-    // to both query and mutation or an array containing the key 'query' and/or
-    // 'mutation' with the according Route
-    //
-    // Example:
-    //
-    // Same route for both query and mutation
-    //
-    // 'routes' => 'path/to/query/{graphql_schema?}',
-    //
-    // or define each route
-    //
-    // 'routes' => [
-    //     'query' => 'query/{graphql_schema?}',
-    //     'mutation' => 'mutation/{graphql_schema?}',
-    // ]
-    //
     'routes' => '{graphql_schema?}',
 
-    // The controller to use in GraphQL request. Either a string that will apply
-    // to both query and mutation or an array containing the key 'query' and/or
-    // 'mutation' with the according Controller and method
-    //
-    // Example:
-    //
-    // 'controllers' => [
-    //     'query' => '\Rebing\GraphQL\GraphQLController@query',
-    //     'mutation' => '\Rebing\GraphQL\GraphQLController@mutation'
-    // ]
-    //
     'controllers' => \Rebing\GraphQL\GraphQLController::class.'@query',
 
-    // Any middleware for the graphql route group
     'middleware' => [],
 
-    // Additional route group attributes
-    //
-    // Example:
-    //
-    // 'route_group_attributes' => ['guard' => 'api']
-    //
     'route_group_attributes' => [],
 
-    // The name of the default schema used when no argument is provided
-    // to GraphQL::schema() or when the route is used without the graphql_schema
-    // parameter.
     'default_schema' => 'default',
-
 
     'schemas' => [
         'default' => [
@@ -72,12 +31,12 @@ return [
                 PostQuery::class,
                 PostsQuery::class,
                 PostCommentsQuery::class,
-                App\GraphQL\Queries\ReplyCommentsQuery::class,
+                ReplyCommentsQuery::class,
+                ProfileQuery::class,
             ],
             'mutation' => [
-                // 'createBook'  => CreateBookMutation::class,
-                // 'updateBook'  => UpdateBookMutation::class,
-                // 'deleteBook'  => DeleteBookMutation::class,
+                ResendCodeMutation::class,
+                UpdateProfileMutation::class,
             ],
             'method' => ['get', 'post'],
         ],
@@ -85,27 +44,10 @@ return [
 
     'types' => [],
 
-    // The types will be loaded on demand. Default is to load all types on each request
-    // Can increase performance on schemes with many types
-    // Presupposes the config type key to match the type class name property
     'lazyload_types' => false,
 
-    // This callable will be passed the Error object for each errors GraphQL catch.
-    // The method should return an array representing the error.
-    // Typically:
-    // [
-    //     'message' => '',
-    //     'locations' => []
-    // ]
     'error_formatter' => ['\Rebing\GraphQL\GraphQL', 'formatError'],
 
-    /*
-     * Custom Error Handling
-     *
-     * Expected handler signature is: function (array $errors, callable $formatter): array
-     *
-     * The default handler will pass exceptions to laravel Error Handling mechanism
-     */
     'errors_handler' => ['\Rebing\GraphQL\GraphQL', 'handleErrors'],
 
     // You can set the key, which will be used to retrieve the dynamic variables
@@ -122,15 +64,8 @@ return [
         'disable_introspection' => false,
     ],
 
-    /*
-     * You can define your own pagination type.
-     * Reference \Rebing\GraphQL\Support\PaginationType::class
-     */
     'pagination_type' => \Rebing\GraphQL\Support\PaginationType::class,
 
-    /*
-     * Config for GraphiQL (see (https://github.com/graphql/graphiql).
-     */
     'graphiql' => [
         'prefix' => '/graphiql',
         'controller' => \Rebing\GraphQL\GraphQLController::class.'@graphiql',
@@ -139,21 +74,6 @@ return [
         'display' => env('ENABLE_GRAPHIQL', true),
     ],
 
-    /*
-     * Overrides the default field resolver
-     * See http://webonyx.github.io/graphql-php/data-fetching/#default-field-resolver
-     *
-     * Example:
-     *
-     * ```php
-     * 'defaultFieldResolver' => function ($root, $args, $context, $info) {
-     * },
-     * ```
-     * or
-     * ```php
-     * 'defaultFieldResolver' => [SomeKlass::class, 'someMethod'],
-     * ```
-     */
     'defaultFieldResolver' => null,
 
     /*
