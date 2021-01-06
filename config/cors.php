@@ -15,11 +15,11 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie','graphql/*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie','graphql'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [getenv("FRONTEND_ENDPOINT")],
 
     'allowed_origins_patterns' => [],
 
