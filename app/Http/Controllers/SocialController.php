@@ -38,9 +38,8 @@ class SocialController extends Controller
             ]);
         }
 
-
         $token = Auth::login($user);
-        $user = collect(Auth::user())->only(["id", "email"])->all();
+        $user = collect(Auth::user())->only(["id", "username"])->all();
 
         return response($user)->cookie('token', $token, null, "/", null, null, true);
     }
