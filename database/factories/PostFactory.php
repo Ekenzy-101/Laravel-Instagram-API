@@ -25,6 +25,7 @@ class PostFactory extends Factory
             'id' => $this->faker->unique()->uuid,
             'caption' => $this->faker->sentence(12),
             'image_urls' => ['image_1.jpg', 'image_2.jpg', 'image_3.jpg'],
+            'keys' => ['image_1.jpg', 'image_2.jpg', 'image_3.jpg'],
         ];
     }
 }

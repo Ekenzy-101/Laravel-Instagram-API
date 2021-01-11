@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\GraphQL\Mutations\CreatePostMutation;
 use App\GraphQL\Mutations\ResendCodeMutation;
 use App\GraphQL\Mutations\UpdateProfileMutation;
 use App\GraphQL\Queries\PostCommentsQuery;
@@ -37,6 +38,7 @@ return [
             'mutation' => [
                 ResendCodeMutation::class,
                 UpdateProfileMutation::class,
+                CreatePostMutation::class,
             ],
             'method' => ['get', 'post'],
         ],

@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [getenv("FRONTEND_ENDPOINT")],
+    'allowed_origins' => [env("FRONTEND_ENDPOINT")],
 
     'allowed_origins_patterns' => [],
 

@@ -20,12 +20,15 @@ class Post extends Model
     protected $fillable = [
         'id',
         'caption',
+        'location',
         'image_urls',
+        'keys',
         'user_id',
     ];
 
     protected $casts = [
         'image_urls' => 'array',
+        'keys' => 'array',
     ];
 
     public function user() : BelongsTo

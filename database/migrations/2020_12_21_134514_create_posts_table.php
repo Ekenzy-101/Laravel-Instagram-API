@@ -16,8 +16,10 @@ class CreatePostsTable extends Migration
         Schema::create('ig_posts', function (Blueprint $table) {
             $table->uuid("id")->primary();
             $table->string("caption", 2200);
+            $table->string("location", 200);
             $table->foreignUuid("user_id")->constrained("ig_users")->onDelete('cascade');
             $table->json("image_urls");
+            $table->json("keys");
             $table->timestamps();
         });
     }
