@@ -30,20 +30,21 @@ class PostQuery extends Query
         return [
             "id" => [
                 "name" => "id",
-                "type" => Type::string(),
-                "rules" => ["required"]
+                "type" => Type::nonNull(Type::string()),
             ]
         ];
     }
 
-    public function resolve($root, $args)
+    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
+        $fields = $getSelectFields();
+        $select = $fields->getSelect();
+        $with = $fields->getRelations();
+
         if(!Str::isUuid($args["id"])) {
             return null;
         }
 
-        return Post::where('id', $args["id"])->firstOr(function () {
-            return null;
-        });
+        return Post::select($select)->with($with)->firstWhere('id', $args["id"]);
     }
 }

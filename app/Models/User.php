@@ -85,4 +85,9 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->hasMany(Post::class, "user_id", "id");
     }
+
+    public function likedPosts() : BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, "ig_likes", "user_id", "post_id");
+    }
 }

@@ -42,7 +42,15 @@ class UserType extends GraphQLType
             ],
             "bio" => [
                 "type" => Type::nonNull(Type::string()),
-                "description" => "Litte summary about the user"
+                "description" => "Little summary about the user"
+            ],
+            "phone_no" => [
+                "type" => Type::nonNull(Type::string()),
+                "description" => "The user's phone number"
+            ],
+            "website" => [
+                "type" => Type::nonNull(Type::string()),
+                "description" => "The user's website"
             ],
             "image_url" => [
                 "type" => Type::nonNull(Type::string()),
@@ -51,6 +59,10 @@ class UserType extends GraphQLType
             "posts" => [
                 "type" => Type::listOf(GraphQL::type("Post")),
                 "description" => "The posts created by this user"
+            ],
+            "likedPosts" => [
+                "type" => Type::listOf(GraphQL::type("Post")),
+                "description" => "The posts the user has liked"
             ],
             "followers" => [
                 "type" => Type::listOf(GraphQL::type("User")),

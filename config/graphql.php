@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 use App\GraphQL\Mutations\CreatePostMutation;
+use App\GraphQL\Mutations\DeletePostMutation;
 use App\GraphQL\Mutations\ResendCodeMutation;
+use App\GraphQL\Mutations\ToggleFollowMutation;
+use App\GraphQL\Mutations\ToggleLikeMutation;
 use App\GraphQL\Mutations\UpdateProfileMutation;
 use App\GraphQL\Queries\PostCommentsQuery;
 use App\GraphQL\Queries\PostQuery;
@@ -39,6 +42,9 @@ return [
                 ResendCodeMutation::class,
                 UpdateProfileMutation::class,
                 CreatePostMutation::class,
+                DeletePostMutation::class,
+                ToggleLikeMutation::class,
+                ToggleFollowMutation::class,
             ],
             'method' => ['get', 'post'],
         ],

@@ -17,21 +17,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::factory()->create([
-            'username' => 'kenzy',
-            'name' => 'Onyekaba Ekene',
-            'email' => 'ekeneonyekaba83@gmail.com'
+        User::factory()->create([
+            'username' => 'emmanuel1',
+            'name' => 'Onyekaba Emmanuel',
+            'email' => 'emmanuelonyekaba1@gmail.com'
         ]);
 
-        $post = Post::factory()->for($user)->create();
-
-        $comment = PostComment::factory()->for($post)->create([
-            'user_id' => $user->id
+        User::factory()->create([
+            'username' => 'ekene1',
+            'name' => 'John Smith',
+            'email' => 'ekeneonyekaba1@gmail.com'
         ]);
 
-        ReplyComment::factory()->count(3)->for($comment, 'comment')->create([
-            'post_id' => $post->id,
-            'user_id' => $user->id
+        User::factory()->create([
+            'username' => 'ekene2',
+            'name' => 'Wilson Tyler',
+            'email' => 'ekeneonyekaba2@gmail.com'
+        ]);
+
+        User::factory()->create([
+            'username' => 'ekene3',
+            'name' => 'Anthony Joshua',
+            'email' => 'ekeneonyekaba3@gmail.com'
         ]);
     }
 }
