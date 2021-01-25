@@ -12,13 +12,12 @@ use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Rebing\GraphQL\Support\Mutation;
-use Rebing\GraphQL\Support\SelectFields;
 
-class ToggleLikeMutation extends Mutation
+class TogglePostSaveMutation extends Mutation
 {
     protected $attributes = [
-        'name' => 'toggleLike',
-        'description' => 'A mutation to toggle like of a post'
+        'name' => 'togglePostSave',
+        'description' => 'A mutation'
     ];
 
     public function authorize($root, array $args, $ctx, ?ResolveInfo $resolveInfo = null, ?Closure $getSelectFields = null): bool
@@ -54,7 +53,7 @@ class ToggleLikeMutation extends Mutation
             throw new Error('Post not found');
         }
 
-        Auth::user()->likedPosts()->toggle($args["id"]);
+        Auth::user()->savedPosts()->toggle($args["id"]);
 
         return "Success";
     }

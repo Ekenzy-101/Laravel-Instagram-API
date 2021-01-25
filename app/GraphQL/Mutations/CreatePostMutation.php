@@ -82,6 +82,8 @@ class CreatePostMutation extends Mutation
                 $cmd = $s3Client->getCommand('PutObject', [
                     'Bucket' => $bucket_name,
                     'Key' => $key,
+                    'ContentType' => 'image/jpeg',
+                    'ACL' => 'public-read'
                 ]);
 
                 $request = $s3Client->createPresignedRequest($cmd, '+40 minutes');

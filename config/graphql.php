@@ -2,12 +2,19 @@
 
 declare(strict_types=1);
 
+use App\GraphQL\Mutations\CreateCommentMutation;
 use App\GraphQL\Mutations\CreatePostMutation;
+use App\GraphQL\Mutations\CreateReplyMutation;
+use App\GraphQL\Mutations\DeleteCommentMutation;
 use App\GraphQL\Mutations\DeletePostMutation;
 use App\GraphQL\Mutations\ResendCodeMutation;
+use App\GraphQL\Mutations\ToggleCommentLikeMutation;
 use App\GraphQL\Mutations\ToggleFollowMutation;
-use App\GraphQL\Mutations\ToggleLikeMutation;
+use App\GraphQL\Mutations\TogglePostLikeMutation;
+use App\GraphQL\Mutations\TogglePostSaveMutation;
+use App\GraphQL\Mutations\UpdatePasswordMutation;
 use App\GraphQL\Mutations\UpdateProfileMutation;
+use App\GraphQL\Mutations\UpdateProfilePictureMutation;
 use App\GraphQL\Queries\PostCommentsQuery;
 use App\GraphQL\Queries\PostQuery;
 use App\GraphQL\Queries\PostsQuery;
@@ -31,20 +38,28 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
-                UserQuery::class,
                 PostQuery::class,
                 PostsQuery::class,
                 PostCommentsQuery::class,
-                ReplyCommentsQuery::class,
                 ProfileQuery::class,
+                ReplyCommentsQuery::class,
+                UserQuery::class,
             ],
             'mutation' => [
-                ResendCodeMutation::class,
-                UpdateProfileMutation::class,
+
                 CreatePostMutation::class,
+                CreateCommentMutation::class,
+                CreateReplyMutation::class,
                 DeletePostMutation::class,
-                ToggleLikeMutation::class,
+                DeleteCommentMutation::class,
+                ResendCodeMutation::class,
+                TogglePostLikeMutation::class,
+                TogglePostSaveMutation::class,
+                ToggleCommentLikeMutation::class,
                 ToggleFollowMutation::class,
+                UpdatePasswordMutation::class,
+                UpdateProfileMutation::class,
+                UpdateProfilePictureMutation::class
             ],
             'method' => ['get', 'post'],
         ],
@@ -58,14 +73,8 @@ return [
 
     'errors_handler' => ['\Rebing\GraphQL\GraphQL', 'handleErrors'],
 
-    // You can set the key, which will be used to retrieve the dynamic variables
     'params_key' => 'variables',
 
-    /*
-     * Options to limit the query complexity and depth. See the doc
-     * @ https://webonyx.github.io/graphql-php/security
-     * for details. Disabled by default.
-     */
     'security' => [
         'query_max_complexity' => null,
         'query_max_depth' => null,
@@ -84,9 +93,6 @@ return [
 
     'defaultFieldResolver' => null,
 
-    /*
-     * Any headers that will be added to the response returned by the default controller
-     */
     'headers' => [],
 
     /*

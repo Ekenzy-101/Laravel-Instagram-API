@@ -12,8 +12,6 @@ use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Rebing\GraphQL\Support\Mutation;
-use Rebing\GraphQL\Support\SelectFields;
-
 class UpdateProfileMutation extends Mutation
 {
     protected $attributes = [
@@ -35,31 +33,31 @@ class UpdateProfileMutation extends Mutation
     {
         return [
             "name" => [
-                "type" => Type::nonNull(Type::string()),
+                "type" => Type::string(),
                 "description" => "The name of the user"
             ],
             "username" => [
-                "type" => Type::nonNull(Type::string()),
+                "type" => Type::string(),
                 "description" => "The username of the user"
             ],
             "email" => [
-                "type" => Type::nonNull(Type::string()),
+                "type" => Type::string(),
                 "description" => "The email of the user"
             ],
             "gender" => [
-                "type" => Type::nonNull(Type::string()),
+                "type" => Type::string(),
                 "description" => "The gender of the user"
             ],
             "bio" => [
-                "type" => Type::nonNull(Type::string()),
+                "type" => Type::string(),
                 "description" => "Little summary about the user"
             ],
             "phone_no" => [
-                "type" => Type::nonNull(Type::string()),
+                "type" => Type::string(),
                 "description" => "The user's phone number"
             ],
             "website" => [
-                "type" => Type::nonNull(Type::string()),
+                "type" => Type::string(),
                 "description" => "The user's website"
             ],
         ];
@@ -67,14 +65,10 @@ class UpdateProfileMutation extends Mutation
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
         $validator = Validator::make($args, [
-            'website' => ['url'],
+            'website' => ['url', "nullable"],
             'email' => ['email', 'required'],
-            'phone_no' => ['phone:AUTO,NG'],
+            'phone_no' => ['phone:AUTO,NG', "nullable"],
             'username' => ['required', 'between:6,30', 'regex:/^[a-z0-9._]+$/'],
         ]);
 
@@ -104,12 +98,14 @@ class UpdateProfileMutation extends Mutation
             throw new Error("The username isn't available. Please try another");
         }
 
-        User::find(Auth::id())->update([
+        Auth::user()->update([
             'username' => $args['username'],
-            'name' => $args['name'],
+            'name' => $args['name'] ? $args['name']: "",
             'email' => strtolower($args['email']),
-            'bio' => $args['bio'],
-            'phone_no' => $args['phone_no'],
+            'bio' => $args['bio'] ? $args['bio']: "",
+            'phone_no' => $args['phone_no'] ? $args['phone_no'] : "",
+            'website' => $args['website'] ? $args['website'] : "",
+            'gender' => $args['gender'] ? $args['gender'] : "",
         ]);
 
         return "Success";
