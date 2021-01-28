@@ -90,8 +90,21 @@ class AuthController extends Controller
             return response()->json('Sorry, your password was incorrect, Please double-check your password', 400);
         }
 
-        $user = collect(Auth::user())->only(["id", "username"])->all();
+        $followers = [];
+        $following = [];
 
+        foreach ($user->followers as $follower) {
+            array_push($followers, collect($follower)->only("id")->all());
+        }
+
+        foreach ($user->following as $followingUser) {
+            array_push($following, collect($followingUser)->only("id")->all());
+        }
+
+        $user = collect(Auth::user())->only(["id", "username", "image_url", "name", "followers.id"])->all();
+
+        $user["following"] = $following;
+        $user["followers"] = $followers;
         return response($user)->cookie('token', $token, null, "/", null, null, true);
     }
 
@@ -125,7 +138,21 @@ class AuthController extends Controller
         // Generate token with the user information
         $token = Auth::login($user);
 
-        $user = collect($user)->only(["id", "username"])->all();
+        $followers = [];
+        $following = [];
+
+        foreach ($user->followers as $follower) {
+            array_push($followers, collect($follower)->only("id")->all());
+        }
+
+        foreach ($user->following as $followingUser) {
+            array_push($following, collect($followingUser)->only("id")->all());
+        }
+
+        $user = collect(Auth::user())->only(["id", "username", "image_url", "name", "followers.id"])->all();
+
+        $user["following"] = $following;
+        $user["followers"] = $followers;
 
         return response($user)->cookie('token', $token, null, "/", null, null, true);;
     }

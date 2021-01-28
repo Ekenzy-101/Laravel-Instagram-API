@@ -31,6 +31,7 @@ class SocialController extends Controller
 
             $user = User::create([
                 "id" => Str::orderedUuid()->toString(),
+                'image_url' => $request->image_url,
                 'name' => $request->name,
                 'email' => $request->email,
                 'username' => $username,
@@ -39,8 +40,21 @@ class SocialController extends Controller
         }
 
         $token = Auth::login($user);
-        $user = collect(Auth::user())->only(["id", "username"])->all();
+        $followers = [];
+        $following = [];
 
+        foreach ($user->followers as $follower) {
+            array_push($followers, collect($follower)->only("id")->all());
+        }
+
+        foreach ($user->following as $followingUser) {
+            array_push($following, collect($followingUser)->only("id")->all());
+        }
+
+        $user = collect(Auth::user())->only(["id", "username", "image_url", "name", "followers.id"])->all();
+
+        $user["following"] = $following;
+        $user["followers"] = $followers;
         return response($user)->cookie('token', $token, null, "/", null, null, true);
     }
 }
