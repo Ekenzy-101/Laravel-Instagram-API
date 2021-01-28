@@ -44,6 +44,11 @@ class Post extends Model
 
     public function likes() : BelongsToMany
     {
-        return $this->belongsToMany(User::class, "ig_likes", "post_id", "user_id");
+        return $this->belongsToMany(User::class, "ig_post_likes", "post_id", "user_id");
+    }
+
+    public function saves() : BelongsToMany
+    {
+        return $this->belongsToMany(User::class, "ig_post_saves", "post_id", "user_id");
     }
 }

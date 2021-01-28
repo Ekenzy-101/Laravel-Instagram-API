@@ -58,12 +58,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function followers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'follower_user', 'user_id', 'follower_id');
+        return $this->belongsToMany(User::class, 'ig_user_follows', 'user_id', 'follower_id');
     }
 
     public function following(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'follower_user', 'follower_id', 'user_id');
+        return $this->belongsToMany(User::class, 'ig_user_follows', 'follower_id', 'user_id');
     }
 
     public function getJWTIdentifier()
@@ -88,6 +88,21 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function likedPosts() : BelongsToMany
     {
-        return $this->belongsToMany(Post::class, "ig_likes", "user_id", "post_id");
+        return $this->belongsToMany(Post::class, "ig_post_likes", "user_id", "post_id");
+    }
+
+    public function savedPosts() : BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, "ig_post_saves", "user_id", "post_id");
+    }
+
+    public function likedComments() : BelongsToMany
+    {
+        return $this->belongsToMany(PostComment::class, "ig_comment_likes", "user_id", "comment_id");
+    }
+
+    public function likedReplies() : BelongsToMany
+    {
+        return $this->belongsToMany(ReplyComment::class, "ig_reply_likes", "user_id", "reply_id");
     }
 }
