@@ -4,43 +4,34 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Post;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-use Rebing\GraphQL\Support\SelectFields;
 
-class PostQuery extends Query
+class ProfileQuery extends Query
 {
     protected $attributes = [
-        'name' => 'post',
-        'description' => 'A query to get a particular post'
+        'name' => 'profile',
+        'description' => 'A query to get the authenticated user profile'
     ];
 
     public function type(): Type
     {
-        return GraphQL::type("Post");
+        return GraphQL::type('User');
     }
 
     public function args(): array
     {
         return [
-            "id" => [
-                "name" => "id",
-                "type" => Type::nonNull(Type::string()),
-            ]
+
         ];
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        if(!Str::isUuid($args["id"])) {
-            return null;
-        }
-
-        return Post::find($args["id"]);
+        return Auth::user();
     }
 }

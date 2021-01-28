@@ -41,7 +41,6 @@ class ReplyCommentsQuery extends Query
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
         /** @var SelectFields $fields */
-        // Cookie::queue('kenzy_token', 'djkcjekcfjke');
         $fields = $getSelectFields();
         $select = $fields->getSelect();
         $with = $fields->getRelations();
@@ -50,6 +49,6 @@ class ReplyCommentsQuery extends Query
             return null;
         }
 
-        return ReplyComment::where('comment_id', $args["comment_id"])->get();
+        return ReplyComment::select($select)->with($with)->where('comment_id', $args["comment_id"])->get();
     }
 }

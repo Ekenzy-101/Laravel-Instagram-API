@@ -29,9 +29,7 @@ class PostCommentsQuery extends Query
     {
         return [
             "post_id" => [
-                "name" => "post_id",
-                "type" => Type::string(),
-                "rules" => ["required"]
+                "type" => Type::nonNull(Type::string()),
             ]
         ];
     }
@@ -47,6 +45,6 @@ class PostCommentsQuery extends Query
             return null;
         }
 
-        return PostComment::where('post_id', $args["post_id"])->get() ;
+        return PostComment::select($select)->with($with)->where('post_id', $args["post_id"])->get() ;
     }
 }
