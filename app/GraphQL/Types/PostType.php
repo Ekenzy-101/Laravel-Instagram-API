@@ -49,12 +49,41 @@ class PostType extends GraphQLType
                 "description" => "The owner of the post"
             ],
             "comments" => [
+                "args" =>   [
+                    "count" => [
+                        "type" => Type::int(),
+                    ]
+                ],
                 "type" => Type::listOf(Type::nonNull(GraphQL::type("PostComment"))),
-                "description" => "The owner of the post"
+                "description" => "The owner of the post",
+                "resolve" => function ($root, $args) {
+                    if(count($root->comments) <= 2 || !$args["count"]) {
+                        return $root->comments()->latest()->get();
+                    }
+                    return collect($root->comments()->latest()->get())->slice(0, $args["count"]);
+                }
+            ],
+            "commentsCount" => [
+                "type" => Type::nonNull(Type::int()),
+                "description" => "The no of comments that the post has",
+                "resolve" => function ($root, $args) {
+                    return $root->comments->count();
+                }
             ],
             "likes" => [
                 "type" => Type::listOf(Type::nonNull(GraphQL::type("User"))),
                 "description" => "The list of users that liked the post"
+            ],
+            "likesCount" => [
+                "type" => Type::nonNull(Type::int()),
+                "description" => "The no of likes that the post has",
+                "resolve" => function ($root, $args) {
+                    return $root->likes->count();
+                }
+            ],
+            "saves" => [
+                "type" => Type::listOf(Type::nonNull(GraphQL::type("User"))),
+                "description" => "The list of users that saved the post"
             ],
         ];
     }

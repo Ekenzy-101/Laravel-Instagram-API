@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\GraphQL\Types;
 
 use App\Models\ReplyComment;
+use Carbon\Carbon;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
@@ -32,6 +33,10 @@ class ReplyCommentType extends GraphQLType
                 "type" => Type::nonNull(GraphQL::type("PostComment")),
                 "description" => "The comment of the reply comment"
             ],
+            "likes" => [
+                "type" => Type::listOf(Type::nonNull(GraphQL::type("User"))),
+                "description" => "The likes of the reply comment"
+            ],
             "user" => [
                 "type" => Type::nonNull(GraphQL::type("User")),
                 "description" => "The owner of the reply comment"
@@ -39,6 +44,13 @@ class ReplyCommentType extends GraphQLType
             "post" => [
                 "type" => Type::nonNull(GraphQL::type("Post")),
                 "description" => "The post of the reply comment"
+            ],
+            "created_at" => [
+                "type" => Type::nonNull(Type::string()),
+                "description" => "The time when the post was created",
+                "resolve" => function ($root, $args) {
+                    return Carbon::parse($root->created_at)->diffForHumans();
+                }
             ],
         ];
     }

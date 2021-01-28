@@ -6,6 +6,7 @@ namespace App\GraphQL\Types;
 
 use App\Models\User;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Support\Facades\Auth;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
@@ -64,6 +65,24 @@ class UserType extends GraphQLType
                 "type" => Type::listOf(GraphQL::type("Post")),
                 "description" => "The posts the user has liked"
             ],
+            "likedComments" => [
+                "type" => Type::listOf(GraphQL::type("PostComment")),
+                "description" => "The comments the user has liked"
+            ],
+            "likedReplies" => [
+                "type" => Type::listOf(GraphQL::type("ReplyComment")),
+                "description" => "The replies the user has liked"
+            ],
+            "savedPosts" => [
+                "type" => Type::listOf(GraphQL::type("Post")),
+                "description" => "The posts the user has saved",
+                "resolve" => function ($root, $args) {
+                    if(Auth::id() !== $root->id) {
+                        return [];
+                    }
+                    return $root->savedPosts;
+                }
+            ],
             "followers" => [
                 "type" => Type::listOf(GraphQL::type("User")),
                 "description" => "The people that are following the user"
@@ -76,14 +95,14 @@ class UserType extends GraphQLType
                 "type" => Type::nonNull(Type::int()),
                 "description" => "The no of people the user is following",
                 "resolve" => function ($root, $args) {
-                    return User::find($root->id)->following->count();
+                    return $root->following->count();
                 }
             ],
             "followersCount" => [
                 "type" => Type::nonNull(Type::int()),
                 "description" => "The no of people that are following the user",
                 "resolve" => function ($root, $args) {
-                    return User::find($root->id)->followers->count();
+                    return $root->followers->count();
                 }
             ],
         ];
