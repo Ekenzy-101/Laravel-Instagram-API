@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLikesTable extends Migration
+class CreatePostLikesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateLikesTable extends Migration
      */
     public function up()
     {
-        Schema::create('ig_likes', function (Blueprint $table) {
+        Schema::create('ig_post_likes', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid("post_id")->constrained("ig_posts")->onDelete('cascade');
             $table->foreignUuid("user_id")->constrained("ig_users")->onDelete('cascade');
@@ -28,6 +28,6 @@ class CreateLikesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ig_likes');
+        Schema::dropIfExists('ig_post_likes');
     }
 }
