@@ -11,6 +11,7 @@ use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Rebing\GraphQL\Support\Mutation;
 
 class UpdateProfilePictureMutation extends Mutation
@@ -48,11 +49,17 @@ class UpdateProfilePictureMutation extends Mutation
             'signature_version' => 'v4'
         ]);
 
-        $id =  Auth::id();
+        $id =  Str::orderedUuid()->toString();
         $key = "users/{$id}.jpg";
         $image_url = "https://{$bucket_name}.s3.amazonaws.com/{$key}";
 
         try {
+            if(Auth::user()->image_url) {
+                $s3Client->deleteObject([
+                'Bucket' => $bucket_name,
+                'Key' => Auth::user()->object_key
+                ]);
+            }
             $cmd = $s3Client->getCommand('PutObject', [
                 'Bucket' => $bucket_name,
                 'Key' => $key,
@@ -66,7 +73,7 @@ class UpdateProfilePictureMutation extends Mutation
             throw new Error($e->getMessage());
         }
 
-        Auth::user()->update(["image_url" => $image_url]);
+        Auth::user()->update(["image_url" => $image_url, "object_key" => $key]);
 
         return $presignedUrl;
     }

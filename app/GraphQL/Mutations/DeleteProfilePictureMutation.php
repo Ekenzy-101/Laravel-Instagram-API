@@ -48,9 +48,7 @@ class DeleteProfilePictureMutation extends Mutation
             'signature_version' => 'v4'
         ]);
 
-        $id =  Auth::id();
-        $key = "users/{$id}.jpg";
-        $image_url = "https://{$bucket_name}.s3.amazonaws.com/default.jpg";
+        $key =  Auth::user()->object_key;
 
         try {
             $s3Client->deleteObject([
@@ -61,7 +59,8 @@ class DeleteProfilePictureMutation extends Mutation
             throw new Error($e->getMessage());
         }
 
-        Auth::user()->update(["image_url" => $image_url]);
+        Auth::user()->update(["image_url" => "", "object_key" => ""]);
+
         return "Success";
     }
 }

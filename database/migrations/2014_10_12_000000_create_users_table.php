@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('gender', 10);
             $table->string('phone_no', 20);
+            $table->string('object_key');
             $table->string('image_url');
             $table->string('bio', 150);
             $table->string('website');

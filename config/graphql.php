@@ -7,11 +7,14 @@ use App\GraphQL\Mutations\CreatePostMutation;
 use App\GraphQL\Mutations\CreateReplyMutation;
 use App\GraphQL\Mutations\DeleteCommentMutation;
 use App\GraphQL\Mutations\DeletePostMutation;
+use App\GraphQL\Mutations\DeleteProfilePictureMutation;
+use App\GraphQL\Mutations\DeleteReplyMutation;
 use App\GraphQL\Mutations\ResendCodeMutation;
 use App\GraphQL\Mutations\ToggleCommentLikeMutation;
 use App\GraphQL\Mutations\ToggleFollowMutation;
 use App\GraphQL\Mutations\TogglePostLikeMutation;
 use App\GraphQL\Mutations\TogglePostSaveMutation;
+use App\GraphQL\Mutations\ToggleReplyLikeMutation;
 use App\GraphQL\Mutations\UpdatePasswordMutation;
 use App\GraphQL\Mutations\UpdateProfileMutation;
 use App\GraphQL\Mutations\UpdateProfilePictureMutation;
@@ -51,11 +54,14 @@ return [
                 CreateCommentMutation::class,
                 CreateReplyMutation::class,
                 DeletePostMutation::class,
+                DeleteProfilePictureMutation::class,
+                DeleteReplyMutation::class,
                 DeleteCommentMutation::class,
                 ResendCodeMutation::class,
                 TogglePostLikeMutation::class,
                 TogglePostSaveMutation::class,
                 ToggleCommentLikeMutation::class,
+                ToggleReplyLikeMutation::class,
                 ToggleFollowMutation::class,
                 UpdatePasswordMutation::class,
                 UpdateProfileMutation::class,

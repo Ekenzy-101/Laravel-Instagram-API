@@ -66,14 +66,24 @@ class UpdateProfileMutation extends Mutation
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
         $validator = Validator::make($args, [
-            'website' => ['url', "nullable"],
+            'website' => ["url", "nullable"],
+            'bio' => ['max:150'],
+            'name' => ['max:50'],
             'email' => ['email', 'required'],
-            'phone_no' => ['phone:AUTO,NG', "nullable"],
+            'phone_no' => ['phone:AUTO,NG', "nullable", "max:20"],
             'username' => ['required', 'between:6,30', 'regex:/^[a-z0-9._]+$/'],
         ]);
 
         if ($validator->errors()->has('website')) {
             throw new Error('Enter a valid website');
+        }
+
+        if ($validator->errors()->has('bio')) {
+            throw new Error('Bio must have a maximum of 150 characters');
+        }
+
+        if ($validator->errors()->has('name')) {
+            throw new Error('Name must have a maximum of 50 characters');
         }
 
         if ($validator->errors()->has('username')) {
