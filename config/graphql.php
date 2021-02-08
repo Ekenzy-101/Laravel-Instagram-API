@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\GraphQL\Mutations\CreateCommentMutation;
 use App\GraphQL\Mutations\CreatePostMutation;
 use App\GraphQL\Mutations\CreateReplyMutation;
+use App\GraphQL\Mutations\CreateStoryMutation;
 use App\GraphQL\Mutations\DeleteCommentMutation;
 use App\GraphQL\Mutations\DeletePostMutation;
 use App\GraphQL\Mutations\DeleteProfilePictureMutation;
@@ -53,6 +54,7 @@ return [
                 CreatePostMutation::class,
                 CreateCommentMutation::class,
                 CreateReplyMutation::class,
+                CreateStoryMutation::class,
                 DeletePostMutation::class,
                 DeleteProfilePictureMutation::class,
                 DeleteReplyMutation::class,
