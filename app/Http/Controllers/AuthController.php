@@ -19,7 +19,8 @@ class AuthController extends Controller
     public function register(Request $request) {
         $validator = Validator::make($request->only("email", "password", "username", "name"), [
             'name' => ['required', 'max:50'],
-            'username' => ['required', 'between:6,30', 'regex:/^([a-z0-9._])+$/', 'unique:ig_users,username'],
+            'username' => ['required',
+            'regex:/^(?!.*\.\.)(?!.*\.$)[^\W][a-z0-9.]{0,29}$/', 'unique:ig_users,username'],
             'email' => ['required', 'email', 'max:255', 'unique:ig_users,email'],
             'password' => ['required', 'min:6'],
 
@@ -60,7 +61,7 @@ class AuthController extends Controller
             return response()->json("An unexpected error occured", 500);
         }
 
-        return response()->json("Success");
+        return response()->json("Success", 201);
     }
 
     public function login(Request $request) {
@@ -77,7 +78,7 @@ class AuthController extends Controller
         $user = User::firstWhere('email', strtolower($request->email));
 
         if (!$user) {
-            return response()->json("The username you entered doesn't belong to an account. Please check your username and try-again", 400);
+            return response()->json("The email you entered doesn't belong to an account. Please check your email and try-again", 400);
         }
 
         if (!$user->email_verified_at) {
@@ -101,7 +102,7 @@ class AuthController extends Controller
             array_push($following, collect($followingUser)->only("id")->all());
         }
 
-        $user = collect(Auth::user())->only(["id", "username", "image_url", "name", "followers.id"])->all();
+        $user = collect(Auth::user())->only(["id", "username", "image_url", "name"])->all();
 
         $user["following"] = $following;
         $user["followers"] = $followers;
@@ -149,7 +150,7 @@ class AuthController extends Controller
             array_push($following, collect($followingUser)->only("id")->all());
         }
 
-        $user = collect(Auth::user())->only(["id", "username", "image_url", "name", "followers.id"])->all();
+        $user = collect(Auth::user())->only(["id", "username", "image_url", "name"])->all();
 
         $user["following"] = $following;
         $user["followers"] = $followers;

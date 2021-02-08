@@ -51,7 +51,7 @@ class SocialController extends Controller
             array_push($following, collect($followingUser)->only("id")->all());
         }
 
-        $user = collect(Auth::user())->only(["id", "username", "image_url", "name", "followers.id"])->all();
+        $user = collect(Auth::user())->only(["id", "username", "image_url", "name"])->all();
 
         $user["following"] = $following;
         $user["followers"] = $followers;
