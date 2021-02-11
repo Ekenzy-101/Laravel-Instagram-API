@@ -24,6 +24,7 @@ use App\GraphQL\Queries\PostQuery;
 use App\GraphQL\Queries\PostsQuery;
 use App\GraphQL\Queries\ProfileQuery;
 use App\GraphQL\Queries\ReplyCommentsQuery;
+use App\GraphQL\Queries\StoriesQuery;
 use App\GraphQL\Queries\UserQuery;
 
 return [
@@ -47,6 +48,7 @@ return [
                 PostCommentsQuery::class,
                 ProfileQuery::class,
                 ReplyCommentsQuery::class,
+                StoriesQuery::class,
                 UserQuery::class,
             ],
             'mutation' => [

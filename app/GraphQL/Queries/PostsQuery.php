@@ -11,8 +11,6 @@ use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Facades\Auth;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-use Rebing\GraphQL\Support\SelectFields;
-
 class PostsQuery extends Query
 {
     protected $attributes = [
@@ -30,6 +28,9 @@ class PostsQuery extends Query
         return [
             "random" => [
                 "type" => Type::boolean(),
+            ],
+            "post_id" => [
+                "type" => Type::string(),
             ]
         ];
     }
@@ -38,10 +39,22 @@ class PostsQuery extends Query
     {
 
         if($args["random"]) {
+            // Return random posts
             return Post::all()->shuffle();
         }
 
+        if($args["post_id"]) {
+            // Return other posts created by this user
+            $post =  Post::find($args["post_id"]);
+            if(!$post) {
+                return [];
+            }
+
+            return $post->user->posts->except($post->id);
+        }
+
         if(Auth::user()) {
+            // Return both his posts and following posts
             $all_posts = [];
             $following_users = Auth::user()->following;
             foreach ($following_users as $user) {

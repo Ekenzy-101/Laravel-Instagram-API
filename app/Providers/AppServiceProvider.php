@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\GraphQL\Types\PostCommentType;
 use App\GraphQL\Types\PostType;
 use App\GraphQL\Types\ReplyCommentType;
+use App\GraphQL\Types\StoryType;
 use App\GraphQL\Types\UserType;
 use Illuminate\Support\ServiceProvider;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -32,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
         GraphQL::addType(PostCommentType::class,  "PostComment");
         GraphQL::addType(PostType::class,  "Post");
         GraphQL::addType(UserType::class,  "User");
+        GraphQL::addType(StoryType::class,  "Story");
     }
 }
