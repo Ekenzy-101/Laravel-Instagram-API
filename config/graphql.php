@@ -10,6 +10,7 @@ use App\GraphQL\Mutations\DeleteCommentMutation;
 use App\GraphQL\Mutations\DeletePostMutation;
 use App\GraphQL\Mutations\DeleteProfilePictureMutation;
 use App\GraphQL\Mutations\DeleteReplyMutation;
+use App\GraphQL\Mutations\DeleteStoryMutation;
 use App\GraphQL\Mutations\ResendCodeMutation;
 use App\GraphQL\Mutations\ToggleCommentLikeMutation;
 use App\GraphQL\Mutations\ToggleFollowMutation;
@@ -52,15 +53,15 @@ return [
                 UserQuery::class,
             ],
             'mutation' => [
-
                 CreatePostMutation::class,
                 CreateCommentMutation::class,
                 CreateReplyMutation::class,
                 CreateStoryMutation::class,
+                DeleteCommentMutation::class,
                 DeletePostMutation::class,
                 DeleteProfilePictureMutation::class,
                 DeleteReplyMutation::class,
-                DeleteCommentMutation::class,
+                DeleteStoryMutation::class,
                 ResendCodeMutation::class,
                 TogglePostLikeMutation::class,
                 TogglePostSaveMutation::class,

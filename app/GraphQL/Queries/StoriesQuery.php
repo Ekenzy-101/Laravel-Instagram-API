@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Story;
+use App\Models\User;
 use Closure;
+use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Facades\Auth;
@@ -27,12 +28,24 @@ class StoriesQuery extends Query
     public function args(): array
     {
         return [
-
+            "username" => [
+                'name' => "username",
+                'type' => GraphQL::type("String")
+            ]
         ];
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
+        if($args["username"]) {
+            $user = User::firstWhere("username", $args["username"]);
+
+            if(!$user) {
+                throw new Error('User not found');
+            }
+            return $user->stories;
+        }
+
         if(Auth::user()) {
             // Return both his first story and following's first story
             $stories = [];
@@ -48,6 +61,6 @@ class StoriesQuery extends Query
             return collect($stories)->sortByDesc("created_at");
         }
 
-        return Story::all();
+        return [];
     }
 }
