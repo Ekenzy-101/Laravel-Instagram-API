@@ -43,20 +43,22 @@ class DeleteProfilePictureMutation extends Mutation
         $region = getenv("AWS_DEFAULT_REGION");
 
         $s3Client = new S3Client([
-            'region' => $region,
-            'version' => '2006-03-01',
-            'signature_version' => 'v4'
+            "region" => $region,
+            "version" => '2006-03-01',
+            "signature_version" => 'v4'
         ]);
 
         $key =  Auth::user()->object_key;
 
-        try {
-            $s3Client->deleteObject([
-                'Bucket' => $bucket_name,
-                'Key' => $key
-            ]);
-        } catch (S3Exception $e) {
-            throw new Error($e->getMessage());
+        if($key) {
+            try {
+                $s3Client->deleteObject([
+                    'Bucket' => $bucket_name,
+                    'Key' => $key
+                ]);
+            } catch (S3Exception $e) {
+                throw new Error($e->getMessage());
+            }
         }
 
         Auth::user()->update(["image_url" => "", "object_key" => ""]);

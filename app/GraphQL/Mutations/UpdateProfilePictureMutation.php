@@ -54,7 +54,7 @@ class UpdateProfilePictureMutation extends Mutation
         $image_url = "https://{$bucket_name}.s3.amazonaws.com/{$key}";
 
         try {
-            if(Auth::user()->image_url) {
+            if(Auth::user()->object_key) {
                 $s3Client->deleteObject([
                 'Bucket' => $bucket_name,
                 'Key' => Auth::user()->object_key
