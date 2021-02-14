@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -103,10 +104,11 @@ class AuthController extends Controller
         }
 
         $user = collect(Auth::user())->only(["id", "username", "image_url", "name"])->all();
-
         $user["following"] = $following;
         $user["followers"] = $followers;
-        return response($user)->cookie('token', $token, null, "/", null, null, true);
+
+        $secure = App::environment("production");
+        return response($user)->cookie('token', $token, null, "/", null, $secure, true);
     }
 
     public function logout() {
@@ -151,10 +153,10 @@ class AuthController extends Controller
         }
 
         $user = collect(Auth::user())->only(["id", "username", "image_url", "name"])->all();
-
         $user["following"] = $following;
         $user["followers"] = $followers;
 
-        return response($user)->cookie('token', $token, null, "/", null, null, true);;
+        $secure = App::environment("production");
+        return response($user)->cookie('token', $token, null, "/", null, $secure, true);;
     }
 }

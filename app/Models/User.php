@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Mail\PasswordConfirmation;
+use App\Mail\PasswordReset;
 use App\Mail\Verification;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,7 +17,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, CanResetPassword;
 
     public $incrementing = false;
 
@@ -81,6 +84,28 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         Mail::to($this->email)->send(new Verification($this));
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $endpoint = getenv("FRONTEND_ENDPOINT");
+        $email = $this->email;
+        $username = $this->username;
+        $link = "{$endpoint}/accounts/password/reset/confirm/?token={$token}";
+
+        $data = compact("username", "email", "link");
+
+        Mail::to($email)->send(new PasswordReset($data));
+    }
+
+    public function sendPasswordConfirmationNotification()
+    {
+        $email = $this->email;
+        $username = $this->username;
+
+        $data = compact("username", "email");
+
+        Mail::to($email)->send(new PasswordConfirmation($data));
     }
 
     public function posts() : HasMany

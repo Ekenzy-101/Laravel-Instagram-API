@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -23,5 +24,8 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('verify/email', [AuthController::class, 'verifyEmail']);
+
+Route::post('forgot-password', [PasswordController::class, 'forgotPassword']);
+Route::post('reset-password', [PasswordController::class, 'resetPassword']);
 
 Route::post('auth/facebook', [SocialController::class, 'facebook']);

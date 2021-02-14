@@ -8,10 +8,10 @@ use App\Models\User;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-use Rebing\GraphQL\Support\SelectFields;
-
 class UserQuery extends Query
 {
     protected $attributes = [
@@ -27,22 +27,32 @@ class UserQuery extends Query
     public function args(): array
     {
         return [
-            'username' => [
-                'name' => 'username',
-                'type' => Type::nonNull(Type::string())
+            "username" => [
+                'type' => GraphQL::type("String")
+            ],
+            "token" => [
+                'type' => GraphQL::type("String")
             ]
         ];
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        /** @var SelectFields $fields */
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
-        if(isset($args['username'])) {
+        if($args['username']) {
             return User::with('posts')->firstWhere('username', $args['username']);
         }
+
+        if($args["token"]) {
+            $rows = DB::select("select * from password_resets");
+            $user = [];
+            foreach ($rows as $row) {
+                if(Hash::check($args["token"], $row->token)) {
+                    $user[] = User::firstWhere("email", $row->email);
+                }
+            }
+            return count($user) ? $user[0] : null;
+        }
+
+        return null;
     }
 }
