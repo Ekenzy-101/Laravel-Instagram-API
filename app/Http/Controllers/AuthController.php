@@ -116,7 +116,8 @@ class AuthController extends Controller
 
         Auth::logout(true);
 
-        $cookie = Cookie::forget("token");
+        $secure = App::environment("production");
+        $cookie = cookie('token', "", -1, "/", null, $secure, true, false, "none");
         return response()->json('Success')->withCookie($cookie);
     }
 
