@@ -86,7 +86,7 @@ class PasswordController extends Controller
         $secure = App::environment("production");
 
         return $status === Password::PASSWORD_RESET
-                ? response($this->authUser)->cookie('token', $this->token, null, "/;samesite=none", null, $secure, true)
+                ? response($this->authUser)->cookie('token', $this->token, null, "/", null, $secure, true, false, "none")
                 : response()->json(__($status), 400);
     }
 }
