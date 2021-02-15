@@ -7,6 +7,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -115,7 +116,8 @@ class AuthController extends Controller
 
         Auth::logout(true);
 
-        return response()->json('Success')->withoutCookie("token", "/");
+        $cookie = Cookie::forget("token");
+        return response()->json('Success')->withCookie($cookie);
     }
 
     public function verifyEmail(Request $request) {
