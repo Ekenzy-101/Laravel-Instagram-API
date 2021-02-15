@@ -7,7 +7,6 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -22,7 +21,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->only("email", "password", "username", "name"), [
             'name' => ['required', 'max:50'],
             'username' => ['required',
-            'regex:/^(?!.*\.\.)(?!.*\.$)[^\W][a-z0-9.]{0,29}$/', 'unique:ig_users,username'],
+            'regex:/^([a-z0-9_])([a-z0-9_.])+([a-z0-9_])$/', 'unique:ig_users,username'],
             'email' => ['required', 'email', 'max:255', 'unique:ig_users,email'],
             'password' => ['required', 'min:6'],
 
