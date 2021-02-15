@@ -108,7 +108,7 @@ class AuthController extends Controller
         $user["followers"] = $followers;
 
         $secure = App::environment("production");
-        return response($user)->cookie('token', $token, null, "/", null, $secure, true);
+        return response($user)->cookie('token', $token, null, "/;samesite=none", null, $secure, true);
     }
 
     public function logout() {
@@ -157,6 +157,6 @@ class AuthController extends Controller
         $user["followers"] = $followers;
 
         $secure = App::environment("production");
-        return response($user)->cookie('token', $token, null, "/", null, $secure, true);;
+        return response($user)->cookie('token', $token, null, "/;samesite=none", null, $secure, true);;
     }
 }
