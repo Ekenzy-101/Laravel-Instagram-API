@@ -22,7 +22,7 @@ class PasswordConfirmation extends Mailable
     {
         $address = getenv("MAIL_FROM_ADDRESS");
         $name = getenv("APP_NAME");
-        $subject = "Your Instagram password has been changed";
+        $subject = "Your Kenzygram password has been changed";
         return $this->view('emails.confirm-password')
                     ->from($address, $name)
                     ->subject($subject)

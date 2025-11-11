@@ -53,15 +53,15 @@ class DeleteStoryMutation extends Mutation
             throw new Error('Story not found');
         }
 
-        $bucket_name = getenv("AWS_BUCKET");
-        $region = getenv("AWS_DEFAULT_REGION");
-
         $s3Client = new S3Client([
-            "region" => $region,
-            "version" => '2006-03-01',
-            "signature_version" => 'v4'
+            'endpoint' => getenv("AWS_ENDPOINT"),
+            'region' => getenv("AWS_DEFAULT_REGION"),
+            'use_path_style_endpoint' => true,
+            'version' => '2006-03-01',
+            'signature_version' => 'v4'
         ]);
-
+        
+        $bucket_name = getenv("AWS_BUCKET");
         $key =  "stories/{$story->id}/.jpg";
 
         try {

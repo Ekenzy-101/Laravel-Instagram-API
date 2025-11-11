@@ -40,18 +40,19 @@ class UpdateProfilePictureMutation extends Mutation
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        $bucket_name = getenv("AWS_BUCKET");
-        $region = getenv("AWS_DEFAULT_REGION");
-
         $s3Client = new S3Client([
-            'region' => $region,
+            'endpoint' => getenv("AWS_ENDPOINT"),
+            'region' => getenv("AWS_DEFAULT_REGION"),
+            'use_path_style_endpoint' => true,
             'version' => '2006-03-01',
             'signature_version' => 'v4'
         ]);
-
+        
+        $bucket_name = getenv("AWS_BUCKET");
+        $url = getenv("AWS_URL");
         $id =  Str::orderedUuid()->toString();
         $key = "users/{$id}.jpg";
-        $image_url = "https://{$bucket_name}.s3.amazonaws.com/{$key}";
+        $image_url = "{$url}/{$bucket_name}/{$key}";
 
         try {
             if(Auth::user()->object_key) {
@@ -64,7 +65,6 @@ class UpdateProfilePictureMutation extends Mutation
                 'Bucket' => $bucket_name,
                 'Key' => $key,
                 'ContentType' => 'image/jpeg',
-                'ACL' => 'public-read'
             ]);
 
             $request = $s3Client->createPresignedRequest($cmd, '+40 minutes');

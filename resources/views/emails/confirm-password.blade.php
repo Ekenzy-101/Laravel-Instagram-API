@@ -64,7 +64,7 @@
                                 >
                                   <img
                                     height="33"
-                                    src="https://ci4.googleusercontent.com/proxy/H-WMBt20rSRWwIK0YLwC8Uyi1mnXWEEEiUT0twBA78N4_Rbri9VuqAL_Azd6xVjLkSiTQ6r1RjyDJ2Hx1O_3UqLo4H_LxG1o8LHL4yDfZw=s0-d-e1-ft#https://static.xx.fbcdn.net/rsrc.php/v3/yb/r/QTa-gpOyYBa.png"
+                                    src="https://sabruiqniqzutbaxchly.supabase.co/storage/v1/object/public/kenzygram/ig-email.png"
                                     style="border:0"
                                     class="CToWUd"
                                   />
@@ -146,7 +146,7 @@
                                                             This is a
                                                             confirmation that
                                                             the password for
-                                                            your Instagram
+                                                            your Kenzygram
                                                             account
                                                             {{$data['username']}} has
                                                             just been changed.
@@ -216,7 +216,7 @@
                           <div
                             style="color:#abadae;font-size:11px;margin:0 auto 5px auto"
                           >
-                            © Instagram. Facebook Inc., 1601 Willow Road, Menlo
+                            © Kenzygram. Facebook Inc., 1601 Willow Road, Menlo
                             Park, CA 94025<br />
                           </div>
                           <div

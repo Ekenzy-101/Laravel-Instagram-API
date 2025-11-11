@@ -23,7 +23,7 @@ class PasswordReset extends Mailable
         $address = getenv("MAIL_FROM_ADDRESS");
         $name = getenv("APP_NAME");
         $username = $this->data["username"];
-        $subject = "{$username}, we've made it easy to get back on Instagram";
+        $subject = "{$username}, we've made it easy to get back on Kenzygram";
         return $this->view('emails.reset-password')
                     ->from($address, $name)
                     ->subject($subject)

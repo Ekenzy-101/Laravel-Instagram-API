@@ -59,16 +59,16 @@ class DeletePostMutation extends Mutation
         if ($post->user->id !== Auth::id()) {
             throw new Error('You are not authorized to delete this post');
         }
-
-        $bucket_name = getenv("AWS_BUCKET");
-        $region = getenv("AWS_DEFAULT_REGION");
-
+        
         $s3Client = new S3Client([
-            'region' => $region,
+            'endpoint' => getenv("AWS_ENDPOINT"),
+            'region' => getenv("AWS_DEFAULT_REGION"),
+            'use_path_style_endpoint' => true,
             'version' => '2006-03-01',
             'signature_version' => 'v4'
         ]);
-
+        
+        $bucket_name = getenv("AWS_BUCKET");
         try {
             foreach ($post->keys as $key) {
                 $s3Client->deleteObject([

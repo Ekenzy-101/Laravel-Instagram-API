@@ -39,15 +39,15 @@ class DeleteProfilePictureMutation extends Mutation
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        $bucket_name = getenv("AWS_BUCKET");
-        $region = getenv("AWS_DEFAULT_REGION");
-
         $s3Client = new S3Client([
-            "region" => $region,
-            "version" => '2006-03-01',
-            "signature_version" => 'v4'
+            'endpoint' => getenv("AWS_ENDPOINT"),
+            'region' => getenv("AWS_DEFAULT_REGION"),
+            'use_path_style_endpoint' => true,
+            'version' => '2006-03-01',
+            'signature_version' => 'v4'
         ]);
-
+        
+        $bucket_name = getenv("AWS_BUCKET");
         $key =  Auth::user()->object_key;
 
         if($key) {

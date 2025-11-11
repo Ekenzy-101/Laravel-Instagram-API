@@ -40,25 +40,25 @@ class CreateStoryMutation extends Mutation
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
+        $s3Client = new S3Client([
+            'endpoint' => getenv("AWS_ENDPOINT"),
+            'region' => getenv("AWS_DEFAULT_REGION"),
+            'use_path_style_endpoint' => true,
+            'version' => '2006-03-01',
+            'signature_version' => 'v4',
+        ]);
+        
         $story_id = Str::orderedUuid()->toString();
         $bucket_name = getenv("AWS_BUCKET");
-        $region = getenv("AWS_DEFAULT_REGION");
-
-        $s3Client = new S3Client([
-            'region' => $region,
-            'version' => '2006-03-01',
-            'signature_version' => 'v4'
-        ]);
-
+        $url = getenv("AWS_URL");
         $key = "stories/{$story_id}.jpg";
-        $image_url = "https://{$bucket_name}.s3.amazonaws.com/{$key}";
+        $image_url = "{$url}/{$bucket_name}/{$key}";
 
         try {
             $cmd = $s3Client->getCommand('PutObject', [
                 'Bucket' => $bucket_name,
                 'Key' => $key,
                 'ContentType' => 'image/jpeg',
-                'ACL' => 'public-read'
             ]);
 
             $request = $s3Client->createPresignedRequest($cmd, '+5 minutes');

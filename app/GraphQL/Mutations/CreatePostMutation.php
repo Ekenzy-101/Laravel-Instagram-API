@@ -53,24 +53,24 @@ class CreatePostMutation extends Mutation
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        $ids = range(1, $args["count"]);
-        $post_id = Str::orderedUuid()->toString();
-
-        $bucket_name = getenv("AWS_BUCKET");
-        $region = getenv("AWS_DEFAULT_REGION");
-
         $s3Client = new S3Client([
-            'region' => $region,
+            'endpoint' => getenv("AWS_ENDPOINT"),
+            'region' => getenv("AWS_DEFAULT_REGION"),
+            'use_path_style_endpoint' => true,
             'version' => '2006-03-01',
-            'signature_version' => 'v4'
+            'signature_version' => 'v4',
         ]);
 
+        $ids = range(1, $args["count"]);
+        $post_id = Str::orderedUuid()->toString();
+        $bucket_name = getenv("AWS_BUCKET");
+        $url = getenv("AWS_URL");
         $image_urls = [];
         $object_keys = [];
 
         foreach ($ids as $id) {
             $object_key = "posts/{$post_id}/{$id}.jpg";
-            $full_url = "https://{$bucket_name}.s3.amazonaws.com/{$object_key}";
+            $full_url = "{$url}/{$bucket_name}/{$object_key}";
 
             array_push($image_urls, $full_url);
             array_push($object_keys, $object_key);
@@ -83,7 +83,6 @@ class CreatePostMutation extends Mutation
                     'Bucket' => $bucket_name,
                     'Key' => $key,
                     'ContentType' => 'image/jpeg',
-                    'ACL' => 'public-read'
                 ]);
 
                 $request = $s3Client->createPresignedRequest($cmd, '+40 minutes');

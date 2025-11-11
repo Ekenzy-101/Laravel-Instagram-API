@@ -23,7 +23,7 @@ class Verification extends Mailable
     {
         $address = getenv("MAIL_FROM_ADDRESS");
         $name = getenv("APP_NAME");
-        $subject = "{$this->user->verification_code} is your instagram code";
+        $subject = "{$this->user->verification_code} is your kenzygram code";
         return $this->view('emails.verify-email')
                     ->from($address, $name)
                     ->subject($subject)
