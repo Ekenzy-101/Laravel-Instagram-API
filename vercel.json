@@ -3,7 +3,7 @@
   "version": 2,
   "functions": {
     "api/index.php": {
-      "runtime": "vercel-php@0.7.4"
+      "runtime": "@emmanuelonyekaba/vercel-php@0.0.2"
     }
   },
   "routes": [
@@ -11,5 +11,22 @@
       "src": "/(.*)",
       "dest": "api/index.php"
     }
-  ]
+  ],
+  "env": {
+    "APP_NAME": "Kenzygram",
+    "APP_ENV": "production",
+    "APP_DEBUG": "false",
+    "APP_URL": "https://kenzygram-api.vercel.app",
+    "APP_CONFIG_CACHE": "/tmp/config.php",
+    "APP_EVENTS_CACHE": "/tmp/events.php",
+    "APP_PACKAGES_CACHE": "/tmp/packages.php",
+    "APP_ROUTES_CACHE": "/tmp/routes.php",
+    "APP_SERVICES_CACHE": "/tmp/services.php",
+    "CACHE_DRIVER": "array",
+    "LOG_CHANNEL": "stderr",
+    "NODE_PATH": "node",
+    "SESSION_DRIVER": "array",
+    "SSR_TEMP_PATH": "/tmp/ssr",
+    "VIEW_COMPILED_PATH": "/tmp/views"
+  }
 }

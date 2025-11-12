@@ -1,35 +1,376 @@
-# LARAVEL INSTAGRAM CLONE API
+# Kenzygram API
 
-This is the backend code for the instagram clone
+A robust, scalable backend API for an Instagram clone application built with Laravel and GraphQL. This API provides authentication, user management, media uploads, and social features similar to Instagram.
 
-## TECHNOLOGY STACKS
+## Table of Contents
 
-- Laravel
-- GraphQL
-- PHP
-- PostgreSQL
-- AWS S3
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Database Setup](#database-setup)
+- [Running the Application](#running-the-application)
+- [API Documentation](#api-documentation)
+- [Project Structure](#project-structure)
+- [Development](#development)
 
-## SETUP
+## Features
 
-- Clone this repo by typing `git clone <repo url>`
-- Go to the directory of repo by typing `cd <name of folder>`
-- Run the command `npm install` to install all javascript dependencies
-- Run the command `composer install` to install all php dependencies
-- Set these environment variables
-  `FRONTEND_ENDPOINT=<Your Frontend Endpoint e.g http://localhost:3000>`
-  `MAIL_HOST=smtp.sendgrid.net`
-  `MAIL_MAILER=smtp`
-  `MAIL_PORT=587`
-  `MAIL_USERNAME=apikey`
-  `MAIL_PASSWORD=<Your Sendgrid api key e.g. SG.>`
-  `MAIL_ENCRYPTION=tls`
-  `MAIL_FROM_ADDRESS=<Your verified sender email address from Sendgrid`
-  `AWS_ACCESS_KEY_ID=<IAM User Key ID>`
-  `AWS_SECRET_ACCESS_KEY=<IAM User Access Key>`
-  `AWS_DEFAULT_REGION=<Your default aws region>`
-  `AWS_BUCKET=<S3 Bucket Name>`
-  `DATABASE_URL=<Postgres Connection URI>`
-- Run the command `php artisan jwt:secret` to generate a secret key for signing tokens
-- Run the command `php artisan key:generate` to generate a application key
-- Run the command `php artisan migrate` to create tables in your database
+- 🔐 **JWT Authentication** - Secure token-based authentication
+- 📧 **Email Verification** - User email verification system
+- 🔑 **Password Reset** - Forgot and reset password functionality
+- 🌐 **Social Authentication** - Facebook OAuth integration
+- 📸 **Media Upload** - AWS S3 integration for image storage
+- 🔍 **GraphQL API** - Flexible GraphQL endpoint for data queries
+- 🚀 **RESTful API** - Traditional REST endpoints for authentication
+- 🗄️ **PostgreSQL Database** - Robust relational database support
+- 🔒 **CORS Configuration** - Cross-origin resource sharing support
+
+## Technology Stack
+
+### Backend Framework
+
+- **Laravel 8.x** - PHP web framework
+- **PHP 7.3+ / 8.0+** - Server-side scripting language
+
+### API
+
+- **GraphQL** - Query language and runtime (via `rebing/graphql-laravel`)
+- **REST API** - Traditional RESTful endpoints
+
+### Authentication
+
+- **JWT Auth** - JSON Web Token authentication (`tymon/jwt-auth`)
+- **Auth0** - Authentication service integration
+
+### Database
+
+- **PostgreSQL** - Primary database
+
+### Storage
+
+- **AWS S3** - Object storage for media files (via Supabase)
+
+### Additional Libraries
+
+- **Laravel CORS** - Cross-origin resource sharing
+- **Guzzle HTTP** - HTTP client library
+- **Laravel Phone** - Phone number validation
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- **PHP** >= 7.3 or >= 8.0
+- **Composer** - PHP dependency manager
+- **Node.js** and **npm** - JavaScript runtime and package manager
+- **PostgreSQL** - Database server (or access to a PostgreSQL database)
+- **AWS Account** - For S3 bucket access (or Supabase account)
+- **Git** - Version control system
+
+## Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd Laravel-Instagram-API
+```
+
+### 2. Install PHP Dependencies
+
+```bash
+composer install
+```
+
+### 3. Install JavaScript Dependencies
+
+```bash
+npm install
+```
+
+### 4. Environment Configuration
+
+Copy the example environment file and configure it:
+
+```bash
+cp .env.example .env
+```
+
+Edit the `.env` file with your configuration (see [Configuration](#configuration) section below).
+
+### 5. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 6. Generate JWT Secret Key
+
+```bash
+php artisan jwt:secret
+```
+
+This generates a secret key used for signing JWT tokens.
+
+### 7. Database Migration
+
+Run the migrations to create the database tables:
+
+```bash
+php artisan migrate
+```
+
+Optionally, seed the database with sample data:
+
+```bash
+php artisan db:seed
+```
+
+## Configuration
+
+Configure your application by setting the following environment variables in your `.env` file:
+
+### Frontend Configuration
+
+```env
+FRONTEND_ENDPOINT=http://localhost:3000
+```
+
+The URL of your frontend application for CORS configuration.
+
+### Database Configuration
+
+```env
+DATABASE_URL=postgresql://username:password@host:port/database
+```
+
+PostgreSQL connection string. Alternatively, you can use individual database variables:
+
+- `DB_CONNECTION=pgsql`
+- `DB_HOST=127.0.0.1`
+- `DB_PORT=5432`
+- `DB_DATABASE=your_database`
+- `DB_USERNAME=your_username`
+- `DB_PASSWORD=your_password`
+
+### Supabase Storage Configuration
+
+```env
+AWS_ACCESS_KEY_ID=your_user_key_id
+AWS_SECRET_ACCESS_KEY=your_user_access_key
+AWS_DEFAULT_REGION=your_region
+AWS_BUCKET=your_bucket_name
+AWS_ENDPOINT=https://project_id.storage.supabase.co/storage/v1/s3/
+AWS_URL=https://project_id.supabase.co/storage/v1/object/public
+```
+
+### Email Configuration
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=587
+MAIL_USERNAME=your_smtp_username
+MAIL_PASSWORD=your_smtp_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@example.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Configure these based on your email service provider (e.g., Mailtrap, SendGrid, AWS SES, etc.).
+
+### Application Configuration
+
+Additional important environment variables:
+
+```env
+APP_NAME=Kenzygram
+APP_ENV=local
+APP_KEY=base64:... (generated by key:generate)
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+```
+
+## Database Setup
+
+### Create PostgreSQL Database
+
+1. Connect to PostgreSQL:
+
+```bash
+psql -U postgres
+```
+
+2. Create a new database:
+
+```sql
+CREATE DATABASE instagram_clone;
+```
+
+3. Update your `.env` file with the database credentials.
+
+### Run Migrations
+
+After configuring your database connection, run migrations:
+
+```bash
+php artisan migrate
+```
+
+To rollback and re-run migrations:
+
+```bash
+php artisan migrate:fresh
+```
+
+## Running the Application
+
+### Development Server
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+The API will be available at `http://localhost:8000`.
+
+### GraphQL Endpoint
+
+Access the GraphQL playground/interface at:
+
+```
+http://localhost:8000/graphql
+```
+
+### API Endpoints
+
+The REST API endpoints are available at:
+
+```
+http://localhost:8000
+```
+
+### Build Frontend Assets (if needed)
+
+For development with hot reload:
+
+```bash
+npm run watch
+```
+
+For production build:
+
+```bash
+npm run production
+```
+
+## API Documentation
+
+### Authentication Endpoints
+
+- `POST /login` - User login
+- `POST /register` - User registration
+- `POST /logout` - User logout
+- `POST /verify/email` - Verify user email
+
+### Password Management
+
+- `POST /forgot-password` - Request password reset
+- `POST /reset-password` - Reset password with token
+
+### Social Authentication
+
+- `POST /auth/facebook` - Facebook OAuth authentication
+
+### User Management
+
+- `GET /users` - Get users list
+
+### GraphQL Endpoint
+
+- `POST /graphql` - GraphQL query endpoint
+- `GET /graphql` - GraphQL playground (if enabled)
+
+## Project Structure
+
+```
+Laravel-Instagram-API/
+├── app/                    # Application core
+│   ├── Http/              # HTTP layer (Controllers, Middleware)
+│   ├── Models/            # Eloquent models
+│   └── Providers/         # Service providers
+├── config/                # Configuration files
+│   ├── cors.php          # CORS configuration
+│   └── graphql.php       # GraphQL configuration
+├── database/              # Database files
+│   ├── migrations/       # Database migrations
+│   └── seeders/          # Database seeders
+├── routes/                # Route definitions
+│   ├── api.php           # API routes
+│   └── web.php           # Web routes
+├── storage/               # Storage directory
+├── tests/                 # Test files
+├── public/                # Public assets
+├── resources/             # Views and assets
+├── composer.json          # PHP dependencies
+├── package.json           # JavaScript dependencies
+└── vercel.json           # Vercel deployment config
+```
+
+## Development
+
+### Running Tests
+
+```bash
+php artisan test
+```
+
+or
+
+```bash
+vendor/bin/phpunit
+```
+
+### Code Style
+
+Follow PSR-12 coding standards for PHP code.
+
+### Debugging
+
+Enable debug mode in `.env`:
+
+```env
+APP_DEBUG=true
+```
+
+**Warning:** Never enable `APP_DEBUG=true` in production environments.
+
+### Common Commands
+
+```bash
+# Clear application cache
+php artisan cache:clear
+
+# Clear configuration cache
+php artisan config:clear
+
+# Clear route cache
+php artisan route:clear
+
+# Clear view cache
+php artisan view:clear
+
+# Optimize application
+php artisan optimize
+```
+
+## License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Support
+
+For issues, questions, or contributions, please open an issue on the repository.
